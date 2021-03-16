@@ -1,0 +1,92 @@
+[Variables]
+//
+; INDEX_%%={((%%+1)+Clamp(((%%+1)-#Root_Position#),0,1))-1+#Index_Offset#}
+TILE_%%_X_O={(#PX#+#Tiles_Step_X#*(       (((%%+1)+Clamp(((%%+1)-#Root_Position#),0,1))-1+#Index_Offset#)       % #Tiles_Len#))}
+TILE_%%_Y_O={(#PY#+#Tiles_Step_Y#*Floor(        (((%%+1)+Clamp(((%%+1)-#Root_Position#),0,1))-1+#Index_Offset#)       / #Tiles_Len#))}
+TILE_%%_X=({#TILE_F_X#}+(#TILE_%%_X_O#-{#TILE_F_X#})*[MeasureTimerCalc:])
+TILE_%%_Y=({#TILE_F_Y#}+(#TILE_%%_Y_O#-{#TILE_F_Y#})*[MeasureTimerCalc:])
+TILE_%%_SELECTION=0//
+TILE_F_SELECTION=0
+Update_Tiles=//[!UpdateMeter "MeterTile%%"][!UpdateMeter "MeterTileIcon%%"][!UpdateMeter "MeterTileText%%"][!UpdateMeter "MeterTileSelection%%"][!UpdateMeter "MeterTileHitbox%%"]//
+Update=[!UpdateMeasure "MeasureSlide"][!UpdateMeasure "MeasureTimerCalc"][!UpdateMeter "MeterHitbox"]#Update_Tiles#[!Redraw]
+FullyOppened=//[!UpdateMeter "MeterTileHitbox%%"]//[!Redraw]
+ClosingStart=//[!UpdateMeter "MeterTileHitbox%%"]//[!Redraw]
+//
+TILE_F_X_O={#TILE_F_X#}
+TILE_F_Y_O={#TILE_F_Y#}
+
+[MeasureFileIcon%%]
+Measure=Plugin
+Plugin=FileView
+Path=[MeasureFolder]
+Index={%%+1}
+Type=Icon
+IconSize=Large
+OnChangeAction=[!SetOption MeterTileIcon%% ImageName [MeasureFileIcon%%]]
+
+[MeasureFileName%%]
+Measure=Plugin
+Plugin=FileView
+Path=[MeasureFolder]
+Index={%%+1}
+Type=FileName
+OnChangeAction=[!SetOption MeterTileText%% Text [MeasureFileName%%]]
+
+[MeasureFilePath%%]
+Measure=Plugin
+Plugin=FileView
+Path=[MeasureFolder]
+Index={%%+1}
+Type=FilePath
+
+[MeterTile%%]
+Meter=Shape
+Shape=Rectangle #TILE_%%_X#,#TILE_%%_Y#,{#Tile_Width#},{#Tile_Height#} | Fill Color 0,0,0,(255*[MeasureTimerCalc:]) | Stroke Color 0, 0, 0, (255*[MeasureTimerCalc:])
+DynamicVariables=1
+
+[MeterTileHitbox%%]
+Meter=Shape
+Shape=Rectangle #TILE_%%_X_O#,#TILE_%%_Y_O#,{#Tile_Width#},{#Tile_Height#} | Fill Color 0,0,0,1 | Stroke Color 0, 0, 0, 1
+Hidden=(Clamp(Floor(1-[MeasureTimerCalc:]*2),0,1))
+DynamicVariables=1
+
+
+[MeterTileSelection%%]
+Meter=Shape
+Shape=Rectangle (#TILE_%%_X#+(#Tile_Width#-#Tiles_Selection_Width#)/2),#TILE_%%_Y#,(#Tiles_Selection_Width#),(#Tiles_Text_OY#+[MeterTileText%%:H]) | Fill Color #Hover_Selection_Color#,(#Hover_Selection_Opacity#*#TILE_%%_SELECTION#*[MeasureTimerCalc:]) | Stroke Color #Hover_Selection_Color#, (#Hover_Selection_Border_Opacity#*#TILE_%%_SELECTION#*[MeasureTimerCalc:])
+DynamicVariables=1
+Hidden=(Floor(1-[MeasureTimerCalc:]))
+Group=SelectionGroup
+LeftMouseUpAction=["[MeasureFilePath%%]"]
+MouseOverAction=[!SetVariable TILE_%%_SELECTION 1][!UpdateMeter "MeterTileSelection%%"][!Redraw]
+MouseLeaveAction=[!SetVariable TILE_%%_SELECTION 0][!UpdateMeter "MeterTileSelection%%"][!Redraw]
+
+
+[MeterTileIcon%%]
+Meter=Image
+ImageName=[MeasureFileIcon%%]
+X=(#TILE_%%_X#+#Tiles_Icon_OX#)
+Y=(#TILE_%%_Y#+#Tiles_Icon_OY#)
+W=#Tiles_Icon_Size#
+H=#Tiles_Icon_Size#
+Container=MeterTile%%
+DynamicVariables=1
+
+[MeterTileText%%]
+Meter=String
+Text=[MeasureFileName%%]
+X=(#TILE_%%_X#+#Tiles_Text_OX#)
+Y=(#TILE_%%_Y#+#Tiles_Text_OY#)
+ClipStringW=#Tiles_Text_Width#
+ClipStringH=#Tiles_Text_Height#
+FontColor=255,255,255,255
+StringAlign=CenterTop
+ClipString=2
+FontSize=9.5
+AntiAlias=0
+; FontFace=Segoe UI
+StringEffect=Shadow
+FontEffectColor=0,0,0,255
+Container=MeterTile%%
+DynamicVariables=1
+//
