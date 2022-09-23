@@ -1,11 +1,6 @@
 # EXpandable Folder
-Skin for [Rainmeter](https://www.rainmeter.net/)
-
-Demo: https://youtu.be/WEQzOHPr5ho
-
-Grab latest version from [Releases tab](https://github.com/juh9870/EXpandableFolder/releases/latest)
-## Configuration
-Edit `@Resources/variables.inc`
-
-`Path` variable must be specified before usage, all other options are cosmetic.
-
+Thumbnail picture of image files
+Drag and Drop capabilities
+Navigation through child and parent folders
+File and folder Context Menu
+No need to specifies path in variables.inc file
