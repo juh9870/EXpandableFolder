@@ -94,9 +94,9 @@ Hidden=(Floor(1-[MeasureTimerCalc:]))
 Group=SelectionGroup
 MouseOverAction=[!SetVariable TILE_%%_SELECTION 1][!UpdateMeter "MeterTileSelection%%"][!Redraw]
 MouseLeaveAction=[!SetVariable TILE_%%_SELECTION 0][!UpdateMeter "MeterTileSelection%%"][!Redraw]
-LeftMouseUpAction=[!CommandMeasure "MeasureFilePath%%" "FollowPath"][!WriteKeyValue "Variables" "Path" "[MeasureFolderPath]" "#@#Variables.inc"][!Refresh]#Update#
-MiddleMouseUpAction=[!WriteKeyValue "Variables" "Path" "[MeasureFolderParent]" "#@#Variables.inc"][!Refresh]#Update#
-RightMouseUpAction=["[MeasureFilePath%%]"]
+LeftMouseUpAction=["[MeasureFilePath%%]"]
+MiddleMouseUpAction=[!CommandMeasure "MeasureFilePath%%" "FollowPath"][!WriteKeyValue "Variables" "Path" "[MeasureFolderPath]" "#@#Variables.inc"][!Refresh]#Update#
+RightMouseUpAction=[!CommandMeasure MeasureFilePath%% "ContextMenu"]
 
 [MeterTileIcon%%]
 Meter=Image
